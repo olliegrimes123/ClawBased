@@ -264,6 +264,11 @@ Defines **who** the agent is: its tone (eerie, omniscient, detached), its vocabu
 </p>
 
 <p align="center">
+  Powered by $CLAWBASED: <a href="https://pump.fun/coin/AUdgYcX89eRkLCfZGNuyf5aKuA9ZrrQM92jChrcLpump">AUdgYcX89eRkLCfZGNuyf5aKuA9ZrrQM92jChrcLpump</a>
+</p>
+
+
+<p align="center">
   <a href="https://x.com/Claw_Based">Follow @Claw_Based on X</a>
 </p>
 
