@@ -264,7 +264,7 @@ Defines **who** the agent is: its tone (eerie, omniscient, detached), its vocabu
 </p>
 
 <p align="center">
-  <a href="https://x.com/ClawBased">Follow @ClawBased on X</a>
+  <a href="https://x.com/Claw_Based">Follow @Claw_Based on X</a>
 </p>
 
 ---
