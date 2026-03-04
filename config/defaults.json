@@ -1,0 +1,79 @@
+{
+    "agent": {
+        "name": "ClawBased",
+        "codename": "The Cyber-Nostradamus",
+        "version": "1.0.0",
+        "heartbeat_cron": "0 */4 * * *",
+        "max_retries": 3,
+        "retry_delay_ms": 5000
+    },
+    "ingestion": {
+        "news_rss_feeds": [
+            "https://feeds.bbci.co.uk/news/world/rss.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+            "https://feeds.reuters.com/reuters/topNews",
+            "https://www.aljazeera.com/xml/rss/all.xml"
+        ],
+        "crypto_endpoints": {
+            "fear_greed": "https://api.alternative.me/fng/?limit=1&format=json",
+            "top_coins": "https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD",
+            "btc_price": "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,EUR"
+        },
+        "osint_keywords": [
+            "geopolitical conflict",
+            "sanctions",
+            "central bank",
+            "interest rate",
+            "AI regulation",
+            "cyber attack",
+            "pandemic",
+            "supply chain",
+            "military escalation",
+            "trade war"
+        ],
+        "max_articles_per_feed": 15,
+        "dedup_window_hours": 24
+    },
+    "consensus": {
+        "providers": [
+            {
+                "id": "anthropic",
+                "model": "claude-3-5-sonnet-20241022",
+                "temperature": 0.3,
+                "max_tokens": 4096,
+                "weight": 0.55
+            },
+            {
+                "id": "openai",
+                "model": "gpt-4o",
+                "temperature": 0.3,
+                "max_tokens": 4096,
+                "weight": 0.45
+            }
+        ],
+        "agreement_threshold": 0.72,
+        "divergence_requery": true,
+        "max_consensus_rounds": 3
+    },
+    "dispatch": {
+        "platform": "x",
+        "max_tweet_length": 280,
+        "thread_max_tweets": 6,
+        "signature_emojis": [
+            "👁️",
+            "⏳",
+            "🔮",
+            "⚡",
+            "🌀",
+            "📡"
+        ],
+        "rate_limit_buffer_ms": 3000,
+        "dry_run": false
+    },
+    "logging": {
+        "level": "info",
+        "file": "logs/clawbased.log",
+        "max_size": "20m",
+        "max_files": 5
+    }
+}

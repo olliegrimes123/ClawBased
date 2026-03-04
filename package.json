@@ -1,0 +1,46 @@
+{
+  "name": "clawbased",
+  "version": "1.0.0",
+  "description": "ClawBased — The Cyber-Nostradamus. An autonomous AI Oracle powered by OpenClaw that analyzes the chaos, predicts the inevitable, and gives humanity the alpha to survive the timeline.",
+  "main": "core/heartbeat.js",
+  "scripts": {
+    "start": "node core/heartbeat.js",
+    "heartbeat": "node core/heartbeat.js",
+    "ingest": "node -e \"const { ingestTimeline } = require('./skills/osint_ingestion'); ingestTimeline().then(console.log)\"",
+    "predict": "node -e \"const { seekConsensus } = require('./skills/multi_llm_consensus'); seekConsensus({}).then(console.log)\"",
+    "dispatch": "node -e \"const { dispatchProphecy } = require('./skills/x_dispatcher'); dispatchProphecy('TEST').then(console.log)\"",
+    "lint": "eslint skills/ core/ --ext .js",
+    "validate": "node --check core/heartbeat.js && node --check core/logger.js && node --check skills/osint_ingestion.js && node --check skills/multi_llm_consensus.js && node --check skills/x_dispatcher.js"
+  },
+  "keywords": [
+    "ai-agent",
+    "openclaw",
+    "autonomous",
+    "oracle",
+    "multi-llm",
+    "osint",
+    "twitter-bot",
+    "prediction",
+    "cyber-nostradamus"
+  ],
+  "author": "pashpashpash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pashpashpash/ClawBased.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "dotenv": "^16.4.0",
+    "node-cron": "^3.0.3",
+    "rss-parser": "^3.13.0",
+    "twitter-api-v2": "^1.17.0",
+    "winston": "^3.14.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  }
+}
