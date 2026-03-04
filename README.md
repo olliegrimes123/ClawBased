@@ -270,5 +270,5 @@ Defines **who** the agent is: its tone (eerie, omniscient, detached), its vocabu
 ---
 
 <p align="center">
-  <sub>Built with <a href="https://github.com/openclaw">OpenClaw</a> · Powered by Claude 3.5 Sonnet & GPT-4o · The timeline is always active.</sub>
+  <sub>Built with <a href="https://github.com/openclaw">OpenClaw</a> · The timeline is always active.</sub>
 </p>
