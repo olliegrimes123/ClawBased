@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://x.com/ClawBased">𝕏 @ClawBased</a> · 
+  <a href="https://x.com/Claw_Based">𝕏 @Claw_Based</a> · 
   <a href="#architecture">Architecture</a> · 
   <a href="#the-pipeline">The Pipeline</a> · 
   <a href="#skills">Skills</a> · 
