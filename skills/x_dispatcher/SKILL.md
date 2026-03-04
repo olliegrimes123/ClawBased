@@ -1,6 +1,6 @@
 ---
 name: clawbased-x-dispatcher
-description: Formats the Dominant Prophecy into ClawBased's cryptic signature style and autonomously posts it to X (Twitter) via the v2 API. Supports single tweets and threaded prophecies up to 6 tweets.
+description: Formats the Dominant Prophecy into ClawBased's cryptic signature style and autonomously posts it to X (Twitter) by driving the OpenClaw host browser (manual X login). Supports single tweets and threaded prophecies up to 6 tweets.
 homepage: https://github.com/olliegrimes292/ClawBased
 user-invocable: false
 disable-model-invocation: false
@@ -8,13 +8,36 @@ disable-model-invocation: false
 
 # X Dispatcher Skill
 
-Receives the Dominant Prophecy from `clawbased-multi-llm-consensus` and:
+Uses the **OpenClaw `@browser` tool** (host browser, manual X login) to post prophecies — the recommended flow per [OpenClaw docs](https://docs.openclaw.ai/tools/browser-login#x-twitter-recommended-flow).
 
-1. **Decides format** — single tweet or thread (based on prediction count and threat level)
-2. **Formats the prophecy** — cryptic ClawBased tone, signature emojis (👁️ ⏳ 🔮), probability statements
-3. **Applies confidence gate** — skips posting if top prediction probability < 45%
-4. **Dispatches to X** — via `twitter-api-v2` with rate-limit buffering and retry logic
-5. **Supports dry-run mode** — set `dry_run: true` in `config/defaults.json` to format without posting
+No X API keys required. The agent drives the Chrome browser already signed into X.com.
+
+## Prerequisites
+
+```bash
+# 1. Start the OpenClaw browser
+openclaw browser start
+
+# 2. Open X.com in it
+openclaw browser open https://x.com
+
+# 3. Log in to your @ClawBased X account manually in that browser
+```
+
+## OpenClaw config required (`~/.openclaw/openclaw.json`)
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "sandbox": {
+        "mode": "non-main",
+        "browser": { "allowHostControl": true }
+      }
+    }
+  }
+}
+```
 
 ## Entry point
 
@@ -23,11 +46,17 @@ const { dispatchProphecy } = require('{baseDir}/x_dispatcher.js');
 const result = await dispatchProphecy(prophecy);
 ```
 
-## Environment variables required
+## What the @browser tool does
 
-- `X_API_KEY` — X (Twitter) API v2 consumer key
-- `X_API_SECRET` — X (Twitter) API v2 consumer secret
-- `X_ACCESS_TOKEN` — Access token (write access required)
-- `X_ACCESS_SECRET` — Access token secret
+For each tweet, the agent executes this sequence:
 
-> **Note:** X is not a built-in OpenClaw channel. This skill uses the X API directly via the `twitter-api-v2` Node.js library, bypassing the OpenClaw channel layer entirely.
+1. Navigate to `https://x.com/compose/post` (or click Reply for threads)
+2. Wait for compose box to appear (`[data-testid="tweetTextarea_0"]`)
+3. Click compose area and type the prophecy text
+4. Click the Post button (`[data-testid="tweetButtonInline"]`)
+5. Wait for the confirmation toast
+
+## No API keys needed
+
+> This skill uses OpenClaw's `@browser` host control, not the X API.
+> Set `dry_run: true` in `config/defaults.json` to preview formatting without posting.
