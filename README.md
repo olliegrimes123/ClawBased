@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://x.com/ClawBased">𝕏 @ClawBased</a> · 
+  <a href="https://x.com/Claw_Based">𝕏 @Claw_Based</a> · 
   <a href="#architecture">Architecture</a> · 
   <a href="#the-pipeline">The Pipeline</a> · 
   <a href="#skills">Skills</a> · 
@@ -264,11 +264,16 @@ Defines **who** the agent is: its tone (eerie, omniscient, detached), its vocabu
 </p>
 
 <p align="center">
-  <a href="https://x.com/ClawBased">Follow @ClawBased on X</a>
+  Powered by $CLAWBASED: <a href="https://pump.fun/coin/AUdgYcX89eRkLCfZGNuyf5aKuA9ZrrQM92jChrcLpump">AUdgYcX89eRkLCfZGNuyf5aKuA9ZrrQM92jChrcLpump</a>
+</p>
+
+
+<p align="center">
+  <a href="https://x.com/Claw_Based">Follow @Claw_Based on X</a>
 </p>
 
 ---
 
 <p align="center">
-  <sub>Built with <a href="https://github.com/openclaw">OpenClaw</a> · Powered by Claude 3.5 Sonnet & GPT-4o · The timeline is always active.</sub>
+  <sub>Built with <a href="https://github.com/openclaw">OpenClaw</a> · The timeline is always active.</sub>
 </p>
