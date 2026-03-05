@@ -9,8 +9,9 @@
     "ingest": "node -e \"const { ingestTimeline } = require('./skills/osint_ingestion'); ingestTimeline().then(console.log)\"",
     "predict": "node -e \"const { seekConsensus } = require('./skills/multi_llm_consensus'); seekConsensus({}).then(console.log)\"",
     "dispatch": "node -e \"const { dispatchProphecy } = require('./skills/x_dispatcher'); dispatchProphecy('TEST').then(console.log)\"",
+    "treasury": "SOLANA_SIMULATE=true node -e \"require('./skills/solana_treasury').runTreasuryClaim().then(console.log)\"",
     "lint": "eslint skills/ core/ --ext .js",
-    "validate": "node --check core/heartbeat.js && node --check core/logger.js && node --check skills/osint_ingestion.js && node --check skills/multi_llm_consensus.js && node --check skills/x_dispatcher.js"
+    "validate": "node --check core/heartbeat.js && node --check core/logger.js && node --check skills/osint_ingestion.js && node --check skills/multi_llm_consensus.js && node --check skills/x_dispatcher.js && node --check skills/solana_treasury.js"
   },
   "keywords": [
     "ai-agent",
@@ -21,18 +22,24 @@
     "osint",
     "twitter-bot",
     "prediction",
-    "cyber-nostradamus"
+    "cyber-nostradamus",
+    "solana",
+    "spl-token",
+    "treasury",
+    "airdrop"
   ],
-  "author": "pashpashpash",
+  "author": "olliegrimes123",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pashpashpash/ClawBased.git"
+    "url": "https://github.com/olliegrimes123/ClawBased.git"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@solana/spl-token": "^0.4.0",
+    "@solana/web3.js": "^1.95.0",
     "axios": "^1.7.0",
     "dotenv": "^16.4.0",
     "node-cron": "^3.0.3",
