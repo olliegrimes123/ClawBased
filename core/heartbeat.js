@@ -31,6 +31,7 @@ const logger = require('./logger');
 const { ingestTimeline } = require('../skills/osint_ingestion');
 const { seekConsensus } = require('../skills/multi_llm_consensus');
 const { dispatchProphecy } = require('../skills/x_dispatcher');
+const { saveProphecy } = require('./memory');
 
 // ── Constants ──────────────────────────────────────────────
 const AGENT = config.agent;
@@ -86,6 +87,9 @@ async function executePipeline() {
         // ── Phase 2: Multi-LLM Consensus ──
         logger.info(`[${cycleId}] Phase 2/3: CONSENSUS`);
         const prophecy = await withRetry(() => seekConsensus(snapshot), 'Consensus');
+
+        // Save to memory for self-reflection in future cycles
+        saveProphecy(prophecy);
         result.phases.consensus = {
             status: prophecy.consensus_status || 'UNKNOWN',
             prophecy_id: prophecy.prophecy_id,

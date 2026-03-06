@@ -49,6 +49,14 @@
                 "temperature": 0.3,
                 "max_tokens": 4096,
                 "weight": 0.45
+            },
+            {
+                "id": "ollama",
+                "model": "llama3.3",
+                "temperature": 0.3,
+                "max_tokens": 4096,
+                "weight": 0.0,
+                "endpoint": "http://localhost:11434"
             }
         ],
         "agreement_threshold": 0.72,

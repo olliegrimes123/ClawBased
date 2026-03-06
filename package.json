@@ -41,6 +41,7 @@
     "@solana/spl-token": "^0.4.0",
     "@solana/web3.js": "^1.95.0",
     "axios": "^1.7.0",
+    "better-sqlite3": "^12.6.2",
     "dotenv": "^16.4.0",
     "node-cron": "^3.0.3",
     "rss-parser": "^3.13.0",

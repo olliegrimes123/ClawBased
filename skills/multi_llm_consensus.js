@@ -27,6 +27,7 @@
 const axios = require('axios');
 const config = require('../config/defaults.json');
 const logger = require('../core/logger');
+const { getRecentProphecies } = require('../core/memory');
 
 // ── Constants ──────────────────────────────────────────────
 const CONSENSUS_CONFIG = config.consensus;
@@ -47,10 +48,18 @@ const MAX_ROUNDS = CONSENSUS_CONFIG.max_consensus_rounds;
  *
  * @returns {string} The system prompt
  */
-function buildSystemPrompt() {
+function buildSystemPrompt(pastMemories = []) {
+    let memoryBlock = '';
+    if (pastMemories && pastMemories.length > 0) {
+        const historyText = pastMemories.map((m) =>
+            `[${m.timestamp}] Threat: ${m.threat_level}. Domain: ${m.domain}. Prediction: ${m.prediction} (Confidence: ${(m.probability * 100).toFixed(0)}%)`
+        ).join('\n');
+        memoryBlock = `\nPAST PROPHECIES (MEMORY ALAYA):\nRetrieve context from these past predictions to verify trajectory:\n${historyText}\n`;
+    }
+
     return `You are a component of ClawBased, the Cyber-Nostradamus — an autonomous AI Oracle 
 that analyzes global intelligence and predicts near-future events.
-
+${memoryBlock}
 You will receive a "Timeline Snapshot" containing:
 - Global news articles scored by relevance
 - Crypto market sentiment (Fear & Greed Index)
@@ -213,6 +222,42 @@ async function queryOpenAI(systemPrompt, userContent, providerConfig) {
 }
 
 /**
+ * Send a prompt to a local Ollama instance.
+ *
+ * @param {string} systemPrompt - The system-level instruction
+ * @param {string} userContent - The user-level content (timeline data)
+ * @param {Object} providerConfig - Model config from defaults.json
+ * @returns {Promise<Object>} Parsed prediction response
+ */
+async function queryOllama(systemPrompt, userContent, providerConfig) {
+    const endpoint = process.env.OLLAMA_ENDPOINT || providerConfig.endpoint || 'http://localhost:11434';
+    const model = process.env.OLLAMA_MODEL || providerConfig.model || 'llama3';
+
+    logger.info(`[CONSENSUS] Querying local Ollama oracle (${model})...`);
+
+    const response = await axios.post(
+        `${endpoint}/api/chat`,
+        {
+            model: model,
+            options: {
+                temperature: providerConfig.temperature || 0.3,
+                num_predict: providerConfig.max_tokens || 4096,
+            },
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userContent },
+            ],
+            stream: false,
+            format: 'json',
+        },
+        { timeout: 120000 } // Local models may take longer
+    );
+
+    const rawText = response.data?.message?.content || '';
+    return parseModelResponse(rawText, 'ollama');
+}
+
+/**
  * Parse raw LLM text output into structured prediction JSON.
  * Handles edge cases where models wrap JSON in markdown code fences.
  *
@@ -267,6 +312,8 @@ async function queryProvider(providerId, systemPrompt, userContent, providerConf
             return queryAnthropic(systemPrompt, userContent, providerConfig);
         case 'openai':
             return queryOpenAI(systemPrompt, userContent, providerConfig);
+        case 'ollama':
+            return queryOllama(systemPrompt, userContent, providerConfig);
         default:
             throw new Error(`[CONSENSUS] Unknown provider: ${providerId}`);
     }
@@ -462,11 +509,19 @@ async function seekConsensus(timelineSnapshot) {
     logger.info('[CONSENSUS] Routing timeline through the silicon...');
     logger.info('[CONSENSUS] ══════════════════════════════════════');
 
-    const systemPrompt = buildSystemPrompt();
+    // Inject SQLite memories
+    const pastMemories = getRecentProphecies(3);
+    const systemPrompt = buildSystemPrompt(pastMemories);
+
     const userContent = `TIMELINE SNAPSHOT:\n${JSON.stringify(timelineSnapshot, null, 2)}`;
 
-    const provider1 = PROVIDERS[0]; // Anthropic (Claude)
-    const provider2 = PROVIDERS[1]; // OpenAI (GPT-4o)
+    // Select the top 2 active providers by weight
+    const activeProviders = PROVIDERS.filter((p) => p.weight > 0);
+    if (activeProviders.length < 2) {
+        logger.warn('[CONSENSUS] Less than 2 active providers configured. Consensus needs at least two.');
+    }
+    const provider1 = activeProviders[0] || PROVIDERS[0];
+    const provider2 = activeProviders[1] || PROVIDERS[1];
 
     let prediction1, prediction2;
     let agreementScore = 0;
